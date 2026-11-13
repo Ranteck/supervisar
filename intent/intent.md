@@ -33,8 +33,9 @@ Yo, como único usuario. Los orquestadores (Claude Code, Codex, Antigravity) en 
 - El estado durable sigue en `intent/` de cada proyecto.
 - Mínima y genérica, sin texto repetido entre skills; una skill por tarea.
 - Preferentemente, el supervisor corre en un modelo de alta capacidad.
-- Hago handoff cuando el contexto llega al 30–50 %. El que más rápido se llena es el supervisor;
-  un orquestador con varios workers, no tanto.
+- Las sesiones usan ventana de 1M. Hago handoff cerca de 150k tokens (~15 %) en el supervisor y
+  de 250k (~25 %) en un orquestador. El que más rápido se llena es el supervisor; un orquestador
+  con varios workers, no tanto.
 
 ## Fuera de alcance
 - Cambiar la skill `orquestar`.
@@ -48,3 +49,5 @@ Yo, como único usuario. Los orquestadores (Claude Code, Codex, Antigravity) en 
 ## Cambios
 2026-11-12: se suma la frecuencia de handoff (30–50 % de contexto) y que el supervisor es el que
 más rápido se llena, porque define cuánto cuesta cada mensaje que recibe. Aprobado por Denis.
+2026-11-12: los umbrales pasan de 30–50 % a ~150k (supervisor) y ~250k (orquestador) porque las
+ventanas son de 1M y cada turno del supervisor relee todo su contexto. Aprobado por Denis.
