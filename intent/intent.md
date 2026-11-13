@@ -33,8 +33,8 @@ Yo, como único usuario. Los orquestadores (Claude Code, Codex, Antigravity) en 
 - El estado durable sigue en `intent/` de cada proyecto.
 - Mínima y genérica, sin texto repetido entre skills; una skill por tarea.
 - Preferentemente, el supervisor corre en un modelo de alta capacidad.
-- Las sesiones usan ventana de 1M. Hago handoff cerca del 30 % en el supervisor y del 50 % en un
-  orquestador. El que más rápido se llena es el supervisor; un orquestador
+- Las sesiones usan ventana de 1M. Hago handoff cerca del 30 % en el supervisor y del 40 % en un
+  orquestador; no compacto, porque compactar hace que se olvide de las reglas. El que más rápido se llena es el supervisor; un orquestador
   con varios workers, no tanto.
 
 ## Fuera de alcance
@@ -53,3 +53,5 @@ más rápido se llena, porque define cuánto cuesta cada mensaje que recibe. Apr
 ventanas son de 1M y cada turno del supervisor relee todo su contexto. Aprobado por Denis.
 2026-11-12: los umbrales vuelven a mi rango (supervisor ~30 %, orquestador ~50 %); con ~15 % y
 ~25 % viviría cambiando de sesión. Aprobado por Denis.
+2026-11-12: el orquestador pasa al 40 %, donde se reporta que empieza a notarse el deterioro con
+ventanas de 1M (300k–400k), y se anota que compactar hace olvidar las reglas. Aprobado por Denis.
