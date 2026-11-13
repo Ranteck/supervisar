@@ -10,16 +10,21 @@ está en `~/.local/state/supervisar/run`.
 
 ## Si sos el supervisor
 
-1. **Al arrancar:** si el archivo existe, `orca orchestration run-use --id <id>`. Si no existe, o
-   `run-use` da `run_not_found`, `orca orchestration run-create --objective "supervisor"` y guardá
-   el id en el archivo.
+1. **Al arrancar:** si tu prompt no trae `run-use --id` (no venís de un traspaso) y
+   `~/.local/state/supervisar/terminal` nombra otra pestaña que sigue en `orca terminal list`, hay
+   otro supervisor vivo: preguntale al usuario si lo reemplazás y, si dice que no, frená. Después,
+   si el archivo del run existe, `orca orchestration run-use --id <id>`. Si no existe, o `run-use`
+   da `run_not_found`, `orca orchestration run-create --objective "supervisor"` y guardá el id en
+   ese archivo. Por último, guardá tu `$ORCA_TERMINAL_HANDLE` en el archivo `terminal`.
 2. **Altas, decisiones y cierres:** no respondas; quedan en el inbox.
 3. **Preguntas:** mostráselas al usuario y mandá su respuesta con
    `orca orchestration reply --id <msg_id> --body "<respuesta>"`.
 4. **Resumen, a pedido:** con `assets/resumen.md`, desde
    `orca orchestration inbox --terminal run:<id> --limit 100` de tu run y del run de cada alta (ahí
-   quedan los `Re:` de las respuestas que mandaste), `orca worktree ps` (un orquestador está vivo
-   si su proyecto y rama tienen sesiones vivas) y el `intent/` de cada proyecto. Una pregunta con
+   quedan los `Re:` de las respuestas que mandaste), `orca worktree ps` y el `intent/` de cada
+   proyecto. Un orquestador con `cierre:` está cerrado; si no, está vivo si la pestaña de su último
+   mensaje sigue en `orca terminal list`, y si no está ahí, pero su proyecto y rama tienen sesiones
+   vivas, es un posible traspaso (la pestaña nueva no avisa hasta su próximo mensaje). Una pregunta con
    `Re:` o `decisión:` no está abierta. Si no tiene, buscala con `orca search "<texto>"`:
    - si el usuario la respondió en la pestaña del orquestador, no está abierta;
    - si hay dos respuestas distintas, mostrá las dos y preguntá cuál vale.

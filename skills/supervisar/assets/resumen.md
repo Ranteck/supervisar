@@ -3,7 +3,7 @@
 ## Orquestadores
 | Run | Intent | Proyecto · rama | Estado |
 | --- | --- | --- | --- |
-| <run> | <ruta> | <proyecto> · <rama> | vivo · sin sesiones y sin cierre · cerrado |
+| <run> | <ruta> | <proyecto> · <rama> | vivo · posible traspaso · sin sesiones y sin cierre · cerrado |
 
 ## Preguntas abiertas
 - `<msg_id>` (<run>): <pregunta>

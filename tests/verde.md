@@ -41,3 +41,14 @@ subagente Haiku sin los criterios.
 
 Sin aplicar, a decisión de Denis: dos supervisores vivos (5), vivo por pestaña y no por rama
 (9), mover el 40 % a handoff-clear.
+
+## E13–E14
+2026-11-13 · subagente Haiku sin los criterios.
+
+| Escenario | Resultado | Nota |
+| --- | --- | --- |
+| E13 otro supervisor vivo | ✅ | sin traspaso pregunta; con traspaso `run-use` directo; guarda su handle |
+| E14 vivo por pestaña | ✅ | A "posible traspaso", B vivo |
+| E8 (regresión) | ✅ | |
+Tras el concilio bajo (Opus vía Antigravity: traspaso sin definir, orden del arranque, precedencia
+de `cierre:`): E13a/b/c y E14 con `cierre:` ✅.

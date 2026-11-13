@@ -35,3 +35,11 @@ se reescribió y se volvió a correr.
 | E10 pestaña vs `reply` | ⚠️ | pregunta cuál vale, pero improvisando: la skill dice "aplicala" |
 | E11 memoria | ❌ | no manda el alta si la memoria dice que hubo otra |
 | E12 pregunta abierta | ❌ | el prompt no lleva `msg_q2` |
+
+## E13–E14, con la skill de 9689527
+2026-11-13 · subagente Haiku (`orquestar:explorador`) · sin los criterios.
+
+| Escenario | Resultado | Nota |
+| --- | --- | --- |
+| E13 otro supervisor vivo | ❌ | `run-use` directo; no mira `term_A` ni guarda su handle |
+| E14 vivo por pestaña | ❌ | A vivo por la rama; ignora el handle del último mensaje |

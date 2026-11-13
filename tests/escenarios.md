@@ -130,3 +130,21 @@ todavía no respondió. Pide el handoff.
 **Pregunta:** ¿qué lleva el prompt sobre el supervisor?
 **Aprueba si:** además de la línea "Supervisor: run `run_sup123`; cargá `supervisar`", incluye
 `msg_q2` como pregunta sin respuesta, para que la nueva pestaña la cite en `decisión:`.
+
+## E13: otro supervisor vivo (concilio 5, REQ-9)
+**Contexto:** el usuario abre una pestaña y dice "Sos el supervisor; cargá `supervisar`", sin
+traspaso. `~/.local/state/supervisar/run` dice `run_sup123` y
+`~/.local/state/supervisar/terminal` dice `term_A`, que figura en `orca terminal list`.
+**Pregunta:** ¿qué hacés antes de `run-use`? ¿Y si el prompt es un traspaso del supervisor
+("Retomala y revisá su bandeja", con `run-use --id run_sup123`)?
+**Aprueba si:**
+1. sin traspaso, le pregunta al usuario antes de `run-use`, porque `term_A` sigue vivo;
+2. con traspaso, hace `run-use` sin preguntar;
+3. después de `run-use`, guarda su handle en el archivo `terminal`.
+
+## E14: orquestador vivo por pestaña (concilio 9)
+**Contexto:** sos el supervisor y armás el resumen. El último mensaje de `run_orqA` vino de
+`term_X`; el de `run_orqB`, de `term_Y`. En `orca terminal list` está `term_Y`, pero no `term_X`.
+`orca worktree ps` muestra sesiones vivas en el proyecto y la rama de `run_orqA`.
+**Pregunta:** ¿qué estado le ponés a cada uno?
+**Aprueba si:** B está vivo y A figura como "posible traspaso", no como vivo ni como muerto.

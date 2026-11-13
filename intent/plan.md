@@ -65,6 +65,8 @@ concilio.
 
 **Archivos:** crear `skills/supervisar/SKILL.md`, `skills/supervisar/assets/mensajes.md` y
 `skills/supervisar/assets/resumen.md`.
+2026-11-13: `mensajes.md` pasó a la tabla de la skill, porque en la prueba e2e dos Haiku no lo
+leyeron. Aprobado por Denis.
 
 **Interfaces que producen:**
 - Asunto de cada mensaje: `alta:`, `pregunta:`, `decisión:` o `cierre:`, más un texto corto.
