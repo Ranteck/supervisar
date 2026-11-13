@@ -26,7 +26,7 @@ Estado: aceptado
   "conserva la dirección".
 - REQ-8 MUST: Tras el traspaso de un orquestador, la pestaña vieja se cierra cuando la nueva
   confirma que tomó el trabajo, y el supervisor no recibe mensajes por eso. Origen: Resultado
-  esperado, "la pestaña anterior no queda viva"; Restricciones, "Hago handoff cerca de 150k tokens … y de 250k".
+  esperado, "la pestaña anterior no queda viva"; Restricciones, "Hago handoff cerca del 30 % en el supervisor y del 50 % en un orquestador".
 - REQ-9 MUST: Sin supervisor activo, el orquestador trabaja como hoy y no crea uno. Hay uno solo
   por máquina; si encuentra más de uno, pregunta al usuario. Origen: Resultado esperado, "no es
   el único canal"; Preguntas abiertas.
@@ -36,7 +36,7 @@ Estado: aceptado
 ## Capacidades y escenarios
 ### Alta y traspaso (REQ-1, REQ-2, REQ-8)
 - GIVEN un supervisor activo
-- WHEN arranca un orquestador y, más tarde, cerca de 250k tokens, hace traspaso
+- WHEN arranca un orquestador y, más tarde, cerca del 50 % de contexto, hace traspaso
 - THEN el supervisor recibe un único alta; la pestaña nueva toma la misma dirección y la vieja se
   cierra
 
