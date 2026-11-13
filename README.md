@@ -58,7 +58,8 @@ flowchart TB
   OA & OB -.->|read| I
 ```
 
-Each solid arrow is an Orca message addressed to a run (`run:<id>`). The rules that keep it light:
+Arrows between agents are Orca messages or commands addressed to a run (`run:<id>`). The rules
+that keep it light:
 
 - **Four messages, no progress reports.** An orchestrator sends the supervisor only `alta`
   (sign-on) when it starts, `pregunta` (question) when it needs your decision, `decisión`
@@ -136,13 +137,14 @@ custom event bus:
 - **Messages wake up their recipient.** Orca notifies inside the Claude Code session ("You have 1
   orchestration message"), so nobody polls: your answer wakes the orchestrator, and a question
   wakes the supervisor.
-- **The inbox persists.** If the recipient is busy or between sessions, messages wait. Replies
-  (`reply`) stay in the orchestrator's run and can be reread with `orca orchestration inbox`.
+- **The inbox persists.** Messages reach the recipient's Claude Code session even mid-turn, and
+  they stay in the run's inbox, so a new session that takes the run can reread them with
+  `orca orchestration inbox`. Replies (`reply`) stay in the orchestrator's run.
 - **Workers report to the run, not to the tab.** `worker-start` launches the worker and its
   `worker_done` goes back to the orchestrator's run.
 - **Each message carries the tab that sent it.** With `orca terminal list` the supervisor knows
-  whether an orchestrator is still alive, and `orca worktree ps` and `orca search` complete the
-  picture.
+  whether an orchestrator's tab is still open. `orca worktree ps` (sessions in the worktrees Orca
+  knows about) and `orca search` (full-text search over agent sessions) fill in the rest.
 
 The handoff is where this shows most: the new tab takes the run and receives whatever was pending,
 even while a worker is still running.
