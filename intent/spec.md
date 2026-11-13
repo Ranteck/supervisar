@@ -27,9 +27,9 @@ Estado: aceptado
 - REQ-8 MUST: Tras el traspaso de un orquestador, la pestaña vieja se cierra cuando la nueva
   confirma que tomó el trabajo, y el supervisor no recibe mensajes por eso. Origen: Resultado
   esperado, "la pestaña anterior no queda viva"; Restricciones, "Hago handoff cerca del 30 % en el supervisor y del 40 % en un orquestador".
-- REQ-9 MUST: Sin supervisor activo, el orquestador trabaja como hoy y no crea uno. Hay uno solo
-  por máquina; si encuentra más de uno, pregunta al usuario. Origen: Resultado esperado, "no es
-  el único canal"; Preguntas abiertas.
+- REQ-9 MUST: Sin supervisor activo, el orquestador trabaja como hoy y no crea uno. Hay uno por
+  proyecto: un repo con todos sus worktrees. Si encuentra más de uno vivo en el mismo proyecto, le
+  pregunta al usuario. Origen: Resultado esperado, "no es el único canal"; Cambios 2026-11-13.
 - REQ-10 MUST: El traspaso actual sigue igual sin supervisor y solo suma su dirección cuando hay
   uno. Origen: Restricciones, "sin texto repetido entre skills".
 - REQ-11 SHOULD: Al pasar su umbral de contexto (supervisor 30 %, orquestador 40 %), el agente

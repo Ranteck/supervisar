@@ -8,7 +8,7 @@ y sus decisiones pendientes, y "me termino volviendo loco" saltando entre chat y
 
 ## Resultado esperado
 Hay un observador (supervisor) y los orquestadores le van diciendo todo, para que pueda coordinar.
-Tengo una sesión principal desde la cual gestiono el trabajo:
+Tengo una sesión principal por proyecto desde la cual gestiono su trabajo:
 - me da un resumen del estado general;
 - centraliza las preguntas que necesitan una decisión mía;
 - detecta tareas duplicadas, dependencias, conflictos y bloqueos;
@@ -43,9 +43,6 @@ Antigravity, solo como workers o concilio. Las skills
 - Que el supervisor actúe solo (acciones autorizadas, automatización): queda para más adelante.
 - Detectar conflictos de archivos entre worktrees distintos.
 
-## Preguntas abiertas
-- ¿Un solo supervisor global o uno por proyecto? (El spec propone uno por máquina, REQ-9.)
-
 ## Cambios
 2026-11-12: se suma la frecuencia de handoff (30–50 % de contexto) y que el supervisor es el que
 más rápido se llena, porque define cuánto cuesta cada mensaje que recibe. Aprobado por Denis.
@@ -57,3 +54,6 @@ ventanas son de 1M y cada turno del supervisor relee todo su contexto. Aprobado 
 ventanas de 1M (300k–400k), y se anota que compactar hace olvidar las reglas. Aprobado por Denis.
 2026-11-12: orquestadores y supervisor son siempre Claude Code; Codex y Antigravity trabajan solo
 como workers o concilio. Se cierra la pregunta de cómo cargarían la skill. Aprobado por Denis.
+2026-11-13: un supervisor por proyecto en vez de uno global. Prefiero 3 supervisores antes que 9
+chats de orquestadores, y no trabajo en más de 2 proyectos a la vez porque me quedo sin tokens. Se
+cierra la pregunta abierta. Aprobado por Denis.
