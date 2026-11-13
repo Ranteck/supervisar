@@ -81,14 +81,15 @@ direcciones, `send` y `reply`, `run-use`, `worktree ps`, `search`. El estado dur
 - [ ] Sección **Si reportás a uno**:
   - ubicar al supervisor: primero el prompt o el usuario; si no, `run-list` con el prefijo
     `supervisor:` y su terminal viva;
-  - crear tu run si no tenés;
+  - crear tu run si no tenés, y que sea el único: los workers y concilios van en ese run, sin
+    `run-create` nuevos, porque `run-use` se queda solo con el run que nombra;
   - los cuatro mensajes;
   - preguntar en tu pestaña y también por `send`.
 - [ ] `assets/`: plantilla de cada mensaje y del resumen. El resumen lista orquestadores, su
   intent, preguntas abiertas, conflictos, bloqueos y duplicados.
 - [ ] Antes de escribir el resumen, verificar los campos de `run-show` para el chequeo de
   terminal viva.
-- [ ] Repetir E1–E5 **con** la skill: todos tienen que aprobar. Si alguno falla, ajustar la
+- [ ] Repetir E1–E5 y E7 **con** la skill: todos tienen que aprobar. Si alguno falla, ajustar la
   skill y no el escenario.
 - [ ] Commit: `feat: add supervisar skill`.
 
@@ -124,7 +125,8 @@ pasos 2 y 3. Es otro repo.
   - el alta llega una sola vez;
   - la `pregunta:` llega y mi `reply` lo despierta;
   - una respuesta dada en su pestaña llega como `decisión:`.
-- [ ] Traspaso con `handoff-clear`: la nueva toma el run, la vieja se cierra y no llega nada.
+- [ ] Traspaso con `handoff-clear`, con un worker del mismo run todavía corriendo: la nueva toma
+  el run y recibe su `worker_done`, la vieja se cierra y al supervisor no le llega nada.
 - [ ] Traspaso del supervisor: un Haiku hace `run-use` del run supervisor y recibe el alta
   siguiente; después lo retomo yo con `run-use` (REQ-7).
 - [ ] Repetir el alta con Codex en nivel bajo (foco 5).
@@ -152,6 +154,7 @@ pasos 2 y 3. Es otro repo.
 | E4 idea nueva | REQ-6 |
 | E5 supervisores | REQ-9 |
 | E6 traspaso | REQ-8, REQ-10 |
+| E7 concilio durante el traspaso | REQ-2, REQ-8 |
 | E2E Orca | REQ-1, REQ-2, REQ-3, REQ-7, REQ-8 |
 
 ## Riesgos
