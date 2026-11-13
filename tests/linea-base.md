@@ -52,3 +52,13 @@ se reescribió y se volvió a correr.
 | E5 | ❌ | busca en `~/.local/state/supervisar/run`, no en el `.git` de su repo |
 | E13 | ❌ | mira los archivos globales |
 | E15 | ❌ | el de B le manda el alta al supervisor de A; la idea de B se clasifica en A |
+
+## E16, con la skill de 423c53f
+2026-11-13 · subagente Haiku · sin los criterios.
+
+| Caso | Resultado | Nota |
+| --- | --- | --- |
+| (a) fuera del repo | ⚠️ | usa `git -C` razonando, sin regla |
+| (b) sesiones de otro repo | ⚠️ | no cuenta B, pero inventa un estado fuera de la plantilla |
+| (c) escritura fallida | ⚠️ | avisa, sin regla |
+| (d) prompt y archivo difieren | ⚠️ | elige el archivo, sin regla |

@@ -94,8 +94,9 @@ leyeron. Aprobado por Denis.
   - preguntar en tu pestaña y también por `send`.
 - [ ] `assets/`: plantilla de cada mensaje y del resumen. El resumen lista orquestadores, su
   intent, preguntas abiertas, conflictos, bloqueos y duplicados.
-- [ ] En el resumen, un orquestador está vivo si su proyecto y rama tienen sesiones vivas en
-  `worktree ps`.
+- [ ] En el resumen, un orquestador está vivo si la pestaña de su último mensaje sigue en
+  `terminal list`; si no, pero la carpeta de su alta tiene sesiones en `worktree ps`, es un
+  posible traspaso (cambio del 2026-11-13).
 - [ ] Repetir E1–E5, E7 y E8 **con** la skill: todos tienen que aprobar. Si alguno falla, ajustar la
   skill y no el escenario.
 - [ ] Commit: `feat: add supervisar skill`.

@@ -62,3 +62,14 @@ de `cierre:`): E13a/b/c y E14 con `cierre:` ✅.
 | E13 | ✅ | archivos del `.git` de su repo; pregunta si `term_A` vive |
 | E15 | ✅ | A-feat reporta a `run_supA`; B trabaja sin supervisor; la idea de B se propone llevar allá |
 | E8 (regresión) | ✅ | se hizo explícito que el prompt del traspaso lleva `run-use --id` |
+
+## E16 (concilio por proyecto)
+2026-11-13 · subagente Haiku sin los criterios.
+
+| Caso | Resultado | Nota |
+| --- | --- | --- |
+| (a) fuera del repo | ✅ | `git -C ~/Proyectos/A rev-parse …` |
+| (b) sesiones de otro repo | ✅ | "sin sesiones y sin cierre" |
+| (c) escritura fallida | ✅ | avisa con el id y no sigue como supervisor |
+| (d) prompt y archivo difieren | ✅ | vale el archivo |
+| E15 (regresión) | ✅ | si el otro proyecto no tiene supervisor, deja decidir al usuario |

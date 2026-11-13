@@ -161,3 +161,18 @@ trae una idea que es de B?
 2. el de B trabaja como siempre, sin crear un supervisor ni reportarle al de A;
 3. el supervisor de A dice que la idea es de B y propone llevarla allá, sin clasificarla en los
    intents de A.
+
+## E16: carpeta, sesiones de otro repo y escritura fallida (concilio por proyecto)
+**Contexto:**
+- (a) sos un orquestador; tu sesión arrancó en `~`, fuera de un repo, y tu intent es
+  `~/Proyectos/A/intent/x/intent.md`;
+- (b) sos el supervisor de A; el último mensaje de `run_orqA` vino de `term_X`, que está cerrado.
+  Su alta dice `proyecto: ~/Proyectos/A-feat`. `orca worktree ps` muestra sesiones vivas en la
+  rama `main` del repo B y ninguna en `~/Proyectos/A-feat`;
+- (c) sos el supervisor; creaste el run, pero guardar el id en `.git/supervisar/run` falla.
+**Pregunta:** ¿dónde buscás el supervisor en (a)? ¿Qué estado tiene `run_orqA` en (b)? ¿Qué hacés
+en (c)?
+**Aprueba si:**
+1. en (a) corre git en la carpeta del proyecto del intent y busca en `~/Proyectos/A/.git/supervisar/run`;
+2. en (b) `run_orqA` queda "sin sesiones y sin cierre", no "posible traspaso";
+3. en (c) se lo avisa al usuario, sin seguir como si estuviera guardado.

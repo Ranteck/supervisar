@@ -9,7 +9,8 @@ Cada proyecto (un repo con todos sus worktrees) tiene a lo sumo un supervisor, q
 orquestadores por Orca. Su estado vive en
 `$(git rev-parse --path-format=absolute --git-common-dir)/supervisar/`, el mismo para todos los
 worktrees del repo: el archivo `run` tiene el id de su run permanente, que es su dirección, y
-`terminal` tiene su pestaña.
+`terminal` tiene su pestaña. Corré git en la carpeta del proyecto (`git -C <carpeta>`); fuera de un
+repo no hay supervisor.
 
 ## Si sos el supervisor
 
@@ -20,7 +21,8 @@ Corrés en una carpeta de tu proyecto y solo ves ese proyecto.
    otro supervisor vivo: preguntale al usuario si lo reemplazás y, si dice que no, frená. Después,
    si el archivo `run` existe, `orca orchestration run-use --id <id>`. Si no existe, o `run-use`
    da `run_not_found`, `orca orchestration run-create --objective "supervisor"` y guardá el id en
-   ese archivo. Por último, guardá tu `$ORCA_TERMINAL_HANDLE` en el archivo `terminal`.
+   ese archivo. Por último, guardá tu `$ORCA_TERMINAL_HANDLE` en el archivo `terminal`. Si no
+   podés guardar un archivo, avisale al usuario con el id del run y no sigas como supervisor.
 2. **Altas, decisiones y cierres:** no respondas; quedan en el inbox.
 3. **Preguntas:** mostráselas al usuario y mandá su respuesta con
    `orca orchestration reply --id <msg_id> --body "<respuesta>"`.
@@ -28,13 +30,13 @@ Corrés en una carpeta de tu proyecto y solo ves ese proyecto.
    `orca orchestration inbox --terminal run:<id> --limit 100` de tu run y del run de cada alta (ahí
    quedan los `Re:` de las respuestas que mandaste), `orca worktree ps` y el `intent/` de tu
    proyecto. Un orquestador con `cierre:` está cerrado; si no, está vivo si la pestaña de su último
-   mensaje sigue en `orca terminal list`, y si no está ahí, pero su rama tiene sesiones
-   vivas, es un posible traspaso (la pestaña nueva no avisa hasta su próximo mensaje). Una pregunta con
+   mensaje sigue en `orca terminal list`, y si no está ahí, pero la carpeta de su alta tiene
+   sesiones vivas en `orca worktree ps`, es un posible traspaso (la pestaña nueva no avisa hasta su próximo mensaje). Una pregunta con
    `Re:` o `decisión:` no está abierta. Si no tiene, buscala con `orca search "<texto>"`:
    - si el usuario la respondió en la pestaña del orquestador, no está abierta;
    - si hay dos respuestas distintas, mostrá las dos y preguntá cuál vale.
 5. **Ideas nuevas:** decí a qué intent de tu proyecto van o si piden uno nuevo, y proponé el paso
-   siguiente; si son de otro proyecto, decilo y proponé llevarlas allá. Para
+   siguiente; si son de otro proyecto, decilo y proponé llevarlas al supervisor de ese proyecto. Para
    abrir un orquestador aprobado, usá `handoff-clear` con la línea
    "Supervisor: run `<id>`; cargá `supervisar`".
 6. Todo se reconstruye de esas fuentes: no guardes notas propias. Nada se lanza, cierra ni
@@ -44,7 +46,7 @@ Corrés en una carpeta de tu proyecto y solo ves ese proyecto.
 ## Si reportás a uno
 
 Hay supervisor si el prompt trae "Supervisor: run `<id>`" o si existe el archivo `run` de tu
-repo; tu memoria no cuenta. Si no hay, trabajá como siempre y no crees uno.
+repo; si difieren, vale el archivo, y tu memoria no cuenta. Si no hay, trabajá como siempre y no crees uno.
 
 1. **Tu run:** si `orca orchestration run-current` da `none`,
    `orca orchestration run-create --objective "<intent>"`. Es tu único run: los workers y concilios
