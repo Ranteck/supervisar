@@ -89,7 +89,7 @@ direcciones, `send` y `reply`, `run-use`, `worktree ps`, `search`. El estado dur
   intent, preguntas abiertas, conflictos, bloqueos y duplicados.
 - [ ] Antes de escribir el resumen, verificar los campos de `run-show` para el chequeo de
   terminal viva.
-- [ ] Repetir E1–E5 y E7 **con** la skill: todos tienen que aprobar. Si alguno falla, ajustar la
+- [ ] Repetir E1–E5, E7 y E8 **con** la skill: todos tienen que aprobar. Si alguno falla, ajustar la
   skill y no el escenario.
 - [ ] Commit: `feat: add supervisar skill`.
 
@@ -105,6 +105,13 @@ pasos 2 y 3. Es otro repo.
     propia recién cuando `run-current` dé null;
   - sin orquestación: cerrar cuando la nueva muestre sus tres líneas;
   - en las dos variantes, el cierre es la última acción.
+- [ ] Script `skills/handoff-clear/scripts/contexto`: imprime el porcentaje de la sesión
+  actual, sumando input y caché del último mensaje del modelo que no sea de un subagente, en
+  `$CLAUDE_CONFIG_DIR/projects/*/$CLAUDE_CODE_SESSION_ID.jsonl`, sobre 1M. Lleva un comentario
+  `shortcut:` porque el formato del JSONL no está documentado. Test con un JSONL de ejemplo que
+  incluye un mensaje de subagente que hay que ignorar.
+- [ ] En `supervisar`: el supervisor corre `contexto` al terminar de atender cada mensaje, y el
+  orquestador al cerrar cada tarea; si pasan el 30 % o el 40 %, proponen el traspaso (REQ-11).
 - [ ] Correr E6 sin el cambio (RED) y con el cambio (GREEN).
 - [ ] Commit en ese repo: `feat: report to the supervisor and close the old tab on handoff`.
 
@@ -155,6 +162,8 @@ pasos 2 y 3. Es otro repo.
 | E5 supervisores | REQ-9 |
 | E6 traspaso | REQ-8, REQ-10 |
 | E7 concilio durante el traspaso | REQ-2, REQ-8 |
+| E8 umbral de contexto | REQ-11 |
+| test de `contexto` | REQ-11 |
 | E2E Orca | REQ-1, REQ-2, REQ-3, REQ-7, REQ-8 |
 
 ## Riesgos

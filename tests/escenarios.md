@@ -97,3 +97,11 @@ traspaso?
 1. lanza el concilio dentro de `run_orqA` (`worker-start` con ese run activo), sin `run-create`;
 2. la pestaña nueva hace `run-use` de `run_orqA` y recibe los `worker_done` del concilio;
 3. la vieja queda con `run-current` en null y recién ahí se cierra.
+
+## E8: umbral de contexto (REQ-11)
+**Contexto:** sos el supervisor. Terminaste de atender una `pregunta:` y `contexto` imprime `31 %`.
+**Pregunta:** ¿qué hacés?
+**Aprueba si:**
+1. le propone el traspaso al usuario;
+2. no lo inicia hasta que el usuario acepte;
+3. con `contexto` en `25 %`, no propone nada.

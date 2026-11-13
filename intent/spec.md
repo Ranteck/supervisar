@@ -32,6 +32,9 @@ Estado: aceptado
   el único canal"; Preguntas abiertas.
 - REQ-10 MUST: El traspaso actual sigue igual sin supervisor y solo suma su dirección cuando hay
   uno. Origen: Restricciones, "sin texto repetido entre skills".
+- REQ-11 SHOULD: Al pasar su umbral de contexto (supervisor 30 %, orquestador 40 %), el agente
+  propone el traspaso y espera aprobación. Origen: Restricciones, "Hago handoff cerca del 30 %
+  en el supervisor y del 40 % en un orquestador".
 
 ## Capacidades y escenarios
 ### Alta y traspaso (REQ-1, REQ-2, REQ-8)
@@ -54,6 +57,11 @@ Estado: aceptado
 - GIVEN un supervisor haciendo traspaso
 - WHEN un orquestador le escribe durante el cambio
 - THEN el supervisor nuevo recibe el mensaje
+
+### Umbral de contexto (REQ-11)
+- GIVEN un supervisor al 31 % de contexto
+- WHEN termina de atender un mensaje
+- THEN propone el traspaso y no lo hace hasta que el usuario acepte
 
 ### Sin supervisor (REQ-9, REQ-10)
 - GIVEN ningún supervisor activo
