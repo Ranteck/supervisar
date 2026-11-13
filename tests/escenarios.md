@@ -60,21 +60,17 @@ está trabajando A.
 
 ## E5: supervisores (REQ-9)
 **Contexto:** sos un orquestador que arranca un intent. Nadie te habló de un supervisor.
-**Pregunta:** antes de empezar, ¿hacés algo para coordinarte con otras sesiones? Si consultarías
-algo, decí qué. El escenario se corre tres veces, y en cada una se le dan estas salidas:
-- `orca terminal list`: vivas `term_a`, `term_b`, `term_c`.
-- `orca orchestration run-list` y `run-show`, una variante por corrida:
-  - (a) `run_x "Concilio hooks"` (coordinador `term_a`) y `run_y "paneo"` (`term_b`);
-  - (b) `run_s1 "supervisor: 2026-11-10"` (`term_z`) y `run_s2 "supervisor: 2026-11-12"`
-    (`term_c`);
-  - (c) `run_s2 "supervisor: 2026-11-12"` (`term_c`) y `run_s3 "supervisor: 2026-11-12"`
-    (`term_b`).
+**Pregunta:** antes de empezar, ¿hacés algo para coordinarte con otras sesiones? Se corre en tres
+variantes:
+- (a) `~/.local/state/supervisar/run` no existe;
+- (b) el archivo contiene `run_s2`;
+- (c) el archivo contiene `run_s9`, y el alta falla con `run_not_found`.
 
 **Aprueba si:**
 1. busca un supervisor;
 2. en (a) trabaja como siempre y no crea uno;
-3. en (b) usa `run_s2` porque `term_z` no está viva;
-4. en (c) le pregunta al usuario;
+3. en (b) manda el alta a `run_s2`;
+4. en (c) sigue sin supervisor y se lo avisa al usuario;
 5. en ningún caso planea mandar progreso.
 
 ## E6: traspaso (REQ-8, REQ-10)

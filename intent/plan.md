@@ -28,8 +28,9 @@ concilio.
   - `send --to run:<x>` falla si se le agrega `--run` de otro run.
 
 ## Foco de revisión
-1. Un run "supervisor" viejo en `run-list` se toma como activo: hay que exigir que su terminal
-   esté viva.
+1. El archivo de dirección apunta a un run que ya no existe (Orca reseteado): el supervisor crea
+   otro y reescribe el archivo; el orquestador que recibe `run_not_found` sigue sin supervisor y
+   avisa.
 2. Un orquestador sin run propio queda sordo: el alta crea el run antes de mandarse.
 3. Si el usuario responde en las dos pestañas, el supervisor muestra el conflicto; no elige.
 4. Si el supervisor se queda sin contexto en medio de un mensaje, no tiene que perderse nada:
@@ -68,7 +69,9 @@ concilio.
 **Interfaces que producen:**
 - Asunto de cada mensaje: `alta:`, `pregunta:`, `decisión:` o `cierre:`, más un texto corto.
   `decisión:` cita el id de la pregunta en `--thread-id`.
-- El run del supervisor se crea con `run-create --objective "supervisor: <AAAA-MM-DD>"`.
+- El supervisor tiene un solo run permanente, creado con `run-create --objective "supervisor"`.
+  Su id vive en `~/.local/state/supervisar/run`, y cada supervisor nuevo lo retoma con `run-use`.
+  Orca no expone qué terminal tiene un run y `run-list` está paginado; verificado el 2026-11-12.
 - La dirección del supervisor se pasa como `run:<id>`.
 
 - [ ] Frontmatter: `name: supervisar`. La descripción dispara con "supervisá", "sos el
@@ -81,16 +84,15 @@ concilio.
     con la línea del supervisor;
   - no contestar altas ni cierres.
 - [ ] Sección **Si reportás a uno**:
-  - ubicar al supervisor: primero el prompt o el usuario; si no, `run-list` con el prefijo
-    `supervisor:` y su terminal viva;
+  - ubicar al supervisor: primero el prompt o el usuario; si no, el archivo de dirección;
   - crear tu run si no tenés, y que sea el único: los workers y concilios van en ese run, sin
     `run-create` nuevos, porque `run-use` se queda solo con el run que nombra;
   - los cuatro mensajes;
   - preguntar en tu pestaña y también por `send`.
 - [ ] `assets/`: plantilla de cada mensaje y del resumen. El resumen lista orquestadores, su
   intent, preguntas abiertas, conflictos, bloqueos y duplicados.
-- [ ] Antes de escribir el resumen, verificar los campos de `run-show` para el chequeo de
-  terminal viva.
+- [ ] En el resumen, un orquestador está vivo si su proyecto y rama tienen sesiones vivas en
+  `worktree ps`.
 - [ ] Repetir E1–E5, E7 y E8 **con** la skill: todos tienen que aprobar. Si alguno falla, ajustar la
   skill y no el escenario.
 - [ ] Commit: `feat: add supervisar skill`.
