@@ -1,7 +1,5 @@
 # supervisar
 
-[Español](README.es.md)
-
 A Claude Code skill to manage, from a single session (the **supervisor**), the orchestrators
 working in parallel on one project. It runs on [Orca](https://onorca.dev). The skill text and its
 prompts are in Spanish.
