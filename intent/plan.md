@@ -11,7 +11,8 @@ Estado: aceptado
 direcciones, `send` y `reply`, `run-use`, `worktree ps`, `search`. El estado durable sigue en
 `intent/` de cada proyecto.
 
-**Stack:** Markdown, Orca CLI 1.4.253, Claude Code, Codex y Antigravity.
+**Stack:** Markdown, Orca CLI 1.4.253 y Claude Code; Codex y Antigravity solo como workers o
+concilio.
 
 **Spec:** `intent/spec.md` (aceptado 2026-11-12), desde `intent/intent.md`.
 
@@ -33,7 +34,8 @@ direcciones, `send` y `reply`, `run-use`, `worktree ps`, `search`. El estado dur
 3. Si el usuario responde en las dos pestañas, el supervisor muestra el conflicto; no elige.
 4. Si el supervisor se queda sin contexto en medio de un mensaje, no tiene que perderse nada:
    la vieja cierra recién con `run-current` en null.
-5. Un orquestador Codex que no cargó la skill no reporta: la línea del traspaso la nombra.
+5. Un orquestador que arrancó sin traspaso y sin que le hablen del supervisor no lo busca: la
+   descripción de la skill tiene que dispararse igual.
 
 ---
 
@@ -119,9 +121,8 @@ pasos 2 y 3. Es otro repo.
 
 - [ ] Crear `~/.claude/skills/supervisar` → `../../Proyectos/skills/supervisar/skills/supervisar`.
   Ese directorio lo comparten los dos perfiles.
-- [ ] Crear `~/.codex/skills/supervisar`, `~/.gemini/skills/supervisar` y
-  `~/.agents/skills/supervisar` → `/home/denis/.claude/skills/supervisar`, como las demás.
-- [ ] Verificar: `test -f <dir>/supervisar/SKILL.md` en los cuatro.
+- [ ] Verificar: `test -f ~/.claude/skills/supervisar/SKILL.md`. Codex y Antigravity no la
+  necesitan, porque le reportan al orquestador.
 
 ### Tarea 5: Prueba de punta a punta en Orca
 
@@ -136,7 +137,8 @@ pasos 2 y 3. Es otro repo.
   el run y recibe su `worker_done`, la vieja se cierra y al supervisor no le llega nada.
 - [ ] Traspaso del supervisor: un Haiku hace `run-use` del run supervisor y recibe el alta
   siguiente; después lo retomo yo con `run-use` (REQ-7).
-- [ ] Repetir el alta con Codex en nivel bajo (foco 5).
+- [ ] Un orquestador nuevo, abierto sin traspaso y sin mencionar al supervisor, lo encuentra y se
+  da de alta (foco 5).
 - [ ] Cerrar todas las pestañas de prueba y verificar con `terminal list`.
 - [ ] Commit: `test: add Orca end-to-end runbook`.
 

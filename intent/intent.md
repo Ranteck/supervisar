@@ -22,7 +22,8 @@ contexto: cuando hace su propio traspaso, conserva la dirección a la que le esc
 orquestadores y guarda resúmenes, no el historial completo.
 
 ## Usuarios y sistemas afectados
-Yo, como único usuario. Los orquestadores (Claude Code, Codex, Antigravity) en Orca. Las skills
+Yo, como único usuario. Orquestadores y supervisor en Claude Code, dentro de Orca; Codex y
+Antigravity, solo como workers o concilio. Las skills
 `handoff-clear` y `ai-native-sdlc`, que la nueva skill reutiliza.
 
 ## Restricciones
@@ -43,8 +44,7 @@ Yo, como único usuario. Los orquestadores (Claude Code, Codex, Antigravity) en 
 - Detectar conflictos de archivos entre worktrees distintos.
 
 ## Preguntas abiertas
-- ¿Un solo supervisor global o uno por proyecto?
-- ¿Cómo carga la skill un orquestador Codex o Antigravity?
+- ¿Un solo supervisor global o uno por proyecto? (El spec propone uno por máquina, REQ-9.)
 
 ## Cambios
 2026-11-12: se suma la frecuencia de handoff (30–50 % de contexto) y que el supervisor es el que
@@ -55,3 +55,5 @@ ventanas son de 1M y cada turno del supervisor relee todo su contexto. Aprobado 
 ~25 % viviría cambiando de sesión. Aprobado por Denis.
 2026-11-12: el orquestador pasa al 40 %, donde se reporta que empieza a notarse el deterioro con
 ventanas de 1M (300k–400k), y se anota que compactar hace olvidar las reglas. Aprobado por Denis.
+2026-11-12: orquestadores y supervisor son siempre Claude Code; Codex y Antigravity trabajan solo
+como workers o concilio. Se cierra la pregunta de cómo cargarían la skill. Aprobado por Denis.
