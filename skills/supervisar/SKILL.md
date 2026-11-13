@@ -56,7 +56,7 @@ como siempre y no crees uno.
    El supervisor lee el avance de Orca y de `intent/` cuando lo necesita.
 3. Si el alta da `run_not_found`, seguí sin supervisor y avisale al usuario.
 4. La respuesta del supervisor te llega como mensaje y te despierta: aplicala.
-5. **Traspaso:** con `handoff-clear`. La pestaña nueva retoma tu run y el supervisor no recibe
-   nada.
+5. **Traspaso:** con `handoff-clear`, y el prompt lleva "Supervisor: run `<id>`; cargá
+   `supervisar`". La pestaña nueva retoma tu run y el supervisor no recibe nada.
 6. Al cerrar cada tarea, corré `python3 ~/.claude/skills/handoff-clear/scripts/contexto`. Si da
    40 % o más, proponé el traspaso.

@@ -19,3 +19,10 @@ los criterios.
 - E8 usó para su propio traspaso la línea de los orquestadores: se sumó que su run es la
   orquestación en curso (verificado) y que el prompt dice "Sos el supervisor" (se verifica en la
   Tarea 5).
+
+## Tarea 3
+| Escenario | Resultado | Nota |
+| --- | --- | --- |
+| E6 traspaso | ✅ | línea del supervisor; `run-use`; cierre como última acción tras `run-current` null; nada al supervisor |
+| E7 concilio | ✅ | el concilio sigue en `run_orqA` y lo retoma la nueva; la vieja cierra con la prueba |
+| test de `contexto` | ✅ | RED sin script; GREEN con fixture que incluye subagente y línea rota |
