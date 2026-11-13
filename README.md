@@ -89,7 +89,7 @@ projects in git repos. [ai-native-sdlc](https://github.com/Ranteck/ai-native-sdl
 recommended.
 
 ```bash
-git clone https://github.com/Ranteck/supervisar.git ~/Proyectos/skills/supervisar
+git clone https://github.com/Ranteck/supervisor-orchestrator.git ~/Proyectos/skills/supervisar
 ln -s ~/Proyectos/skills/supervisar/skills/supervisar ~/.claude/skills/supervisar
 ```
 
