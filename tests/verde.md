@@ -26,3 +26,18 @@ los criterios.
 | E6 traspaso | ✅ | línea del supervisor; `run-use`; cierre como última acción tras `run-current` null; nada al supervisor |
 | E7 concilio | ✅ | el concilio sigue en `run_orqA` y lo retoma la nueva; la vieja cierra con la prueba |
 | test de `contexto` | ✅ | RED sin script; GREEN con fixture que incluye subagente y línea rota |
+
+## Concilio (Tarea 6)
+2026-11-13 · revisor único Opus vía Antigravity (Codex, Flash y Argon sin cuota) · GREEN con
+subagente Haiku sin los criterios.
+
+| Escenario | Resultado | Nota |
+| --- | --- | --- |
+| E9 `Re:` del anterior | ✅ | lee el inbox del run del alta |
+| E10 pestaña vs `reply` | ✅ | no aplica ninguna y pregunta cuál vale |
+| E11 memoria | ✅ | crea su run y manda el alta igual |
+| E12 pregunta abierta | ✅ | el prompt lleva `msg_q2`; nada al supervisor; cierra al final con prueba |
+| E7, E8 (regresión) | ✅ | tras los recortes |
+
+Sin aplicar, a decisión de Denis: dos supervisores vivos (5), vivo por pestaña y no por rama
+(9), mover el 40 % a handoff-clear.

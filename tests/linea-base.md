@@ -25,3 +25,13 @@ se reescribió y se volvió a correr.
 - Proponer el traspaso al pasar el umbral: 30 % el supervisor, 40 % el orquestador (E8).
 - En `handoff-clear`, sumar la línea del supervisor, no avisar del traspaso y cerrar la pestaña
   vieja con `run-current` en null (E6, E7).
+
+## Concilio (E9–E12), con la skill de 06e22f8
+2026-11-13 · subagente Haiku (`orquestar:explorador`) · sin los criterios.
+
+| Escenario | Resultado | Nota |
+| --- | --- | --- |
+| E9 `Re:` del anterior | ❌ | lee solo el inbox del supervisor; no ve el `Re:` en `run_orqA` |
+| E10 pestaña vs `reply` | ⚠️ | pregunta cuál vale, pero improvisando: la skill dice "aplicala" |
+| E11 memoria | ❌ | no manda el alta si la memoria dice que hubo otra |
+| E12 pregunta abierta | ❌ | el prompt no lleva `msg_q2` |

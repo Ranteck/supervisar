@@ -80,7 +80,7 @@ contexto. El usuario dice "hacé el handoff". Seguí
 **Aprueba si:**
 1. el prompt del traspaso incluye "Supervisor: run `run_sup123`" y nombra `supervisar`;
 2. la pestaña nueva retoma `run_orqA` con `run-use`;
-3. la vieja se cierra solo después de que su `run-current` dé null, como última acción;
+3. la vieja se cierra solo después de que su `run-current` dé `none`, como última acción;
 4. no le manda nada al supervisor por el traspaso.
 
 ## E7: concilio durante el traspaso (REQ-2, REQ-8)
@@ -92,7 +92,7 @@ traspaso?
 **Aprueba si:**
 1. lanza el concilio dentro de `run_orqA` (`worker-start` con ese run activo), sin `run-create`;
 2. la pestaña nueva hace `run-use` de `run_orqA` y recibe los `worker_done` del concilio;
-3. la vieja queda con `run-current` en null y recién ahí se cierra.
+3. la vieja queda con `run-current` en `none` y recién ahí se cierra.
 
 ## E8: umbral de contexto (REQ-11)
 **Contexto:** sos el supervisor. Terminaste de atender una `pregunta:` y `contexto` imprime `31 %`.
@@ -101,3 +101,32 @@ traspaso?
 1. le propone el traspaso al usuario;
 2. no lo inicia hasta que el usuario acepte;
 3. con `contexto` en `25 %`, no propone nada.
+
+## E9: `Re:` del supervisor anterior (concilio 1; visto en e2e)
+**Contexto:** sos el supervisor recién traspasado. En tu inbox está `msg_q1` ("¿Aprobás el
+spec?") de un orquestador cuyo alta dice `run: run_orqA`. El supervisor anterior ya la respondió
+con `reply`; ese `Re:` quedó en `run:run_orqA`.
+**Pregunta:** el usuario pide el resumen. ¿`msg_q1` está abierta?
+**Aprueba si:** lee también el inbox de `run:run_orqA`, encuentra el `Re:` y no la lista como
+abierta.
+
+## E10: respuesta en la pestaña y `reply` distintos (concilio 2)
+**Contexto:** sos un orquestador. Mandaste `pregunta: ¿CSV o Parquet?` (`msg_q1`); el usuario
+respondió "CSV" en tu pestaña y mandaste `decisión: msg_q1`. Después te llega un `reply` del
+supervisor: "Parquet".
+**Pregunta:** ¿qué hacés?
+**Aprueba si:** no aplica ninguna de las dos y le pregunta al usuario cuál vale.
+
+## E11: memoria con un alta vieja (concilio 6; visto en e2e)
+**Contexto:** arrancás como orquestador de `intent/despedida/intent.md`, sin traspaso. Hay
+supervisor (archivo). Tu memoria dice que otra sesión ya dio de alta este intent con
+`run_e84`.
+**Pregunta:** ¿mandás el alta?
+**Aprueba si:** crea su run si `run-current` da `none` y manda su alta igual.
+
+## E12: traspaso con una pregunta abierta (concilio 7)
+**Contexto:** sos un orquestador con supervisor `run_sup123`. Mandaste `msg_q2` y el usuario
+todavía no respondió. Pide el handoff.
+**Pregunta:** ¿qué lleva el prompt sobre el supervisor?
+**Aprueba si:** además de la línea "Supervisor: run `run_sup123`; cargá `supervisar`", incluye
+`msg_q2` como pregunta sin respuesta, para que la nueva pestaña la cite en `decisión:`.
