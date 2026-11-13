@@ -1,50 +1,54 @@
 # supervisar
 
-Skill de Claude Code para manejar desde una sola sesión, el **supervisor**, los orquestadores que
-trabajan en paralelo en un mismo proyecto. Corre sobre [Orca](https://onorca.dev).
+[Español](README.es.md)
 
-- [Para qué sirve](#para-qué-sirve)
-- [Cómo funciona](#cómo-funciona)
-- [Instalación](#instalación)
-- [Uso](#uso)
-- [Problemas comunes](#problemas-comunes)
-- [Por qué funciona mejor en Orca](#por-qué-funciona-mejor-en-orca)
-- [Llevarlo a Herdr](#llevarlo-a-herdr)
+A Claude Code skill to manage, from a single session (the **supervisor**), the orchestrators
+working in parallel on one project. It runs on [Orca](https://onorca.dev). The skill text and its
+prompts are in Spanish.
 
-## Para qué sirve
+- [What it does](#what-it-does)
+- [How it works](#how-it-works)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Common problems](#common-problems)
+- [Why it works better on Orca](#why-it-works-better-on-orca)
+- [Porting it to Herdr](#porting-it-to-herdr)
 
-Por cada idea es fácil terminar con cuatro o cinco chats de orquestador abiertos, cada uno con sus
-tareas, sus preguntas y sus decisiones pendientes. El supervisor:
+## What it does
 
-- da un resumen del estado: qué orquestador está vivo, qué preguntas siguen abiertas, qué está
-  duplicado o bloqueado;
-- junta las preguntas que necesitan una decisión tuya y le devuelve tu respuesta al orquestador;
-- dice si una idea nueva corresponde a un intent existente o pide uno nuevo;
-- propone acciones y pide tu OK: nunca lanza, cierra ni redirige nada por su cuenta.
+For every idea it is easy to end up with four or five orchestrator chats open, each with its own
+tasks, questions and pending decisions. The supervisor:
 
-Podés responder desde el supervisor o desde la pestaña del orquestador: en los dos casos la
-decisión le llega al otro.
+- summarizes the state: which orchestrators are alive, which questions are still open, what is
+  duplicated or blocked;
+- collects the questions that need your decision and sends your answer back to the orchestrator;
+- tells you whether a new idea belongs to an existing intent or needs a new one;
+- proposes actions and asks for your OK: it never launches, closes or redirects anything on its
+  own.
 
-## Cómo funciona
+You can answer from the supervisor or from the orchestrator's tab: either way, the decision
+reaches the other side.
 
-Hay tres niveles. Los **workers** (Codex, Antigravity u otros agentes) implementan y revisan. Cada
-**orquestador** lleva un intent y reparte el trabajo entre sus workers. El **supervisor** coordina
-a los orquestadores de un proyecto, que es un repo con todos sus worktrees.
+## How it works
+
+There are three levels. **Workers** (Codex, Antigravity or other agents) implement and review.
+Each **orchestrator** owns an intent and splits the work among its workers. The **supervisor**
+coordinates the orchestrators of one project, which is a repo with all its worktrees.
 
 ```mermaid
 flowchart TB
-  U([Vos])
-  subgraph P["Proyecto: un repo y sus worktrees"]
+  U([You])
+  subgraph P["Project: one repo and its worktrees"]
     S["Supervisor<br/>run:sup"]
-    OA["Orquestador A<br/>run:orqA · intent/a"]
-    OB["Orquestador B<br/>run:orqB · intent/b"]
+    OA["Orchestrator A<br/>run:orqA · intent/a"]
+    OB["Orchestrator B<br/>run:orqB · intent/b"]
     WA1["Worker"]
     WA2["Worker"]
     WB1["Worker"]
     I[("intent/<br/>ai-native-sdlc")]
   end
-  U <-->|resumen, preguntas, OK| S
-  U <-.->|también podés responder acá| OA
+  U <-->|summary, questions, OK| S
+  U <-.->|you can also answer here| OA
   OA -->|alta · pregunta · decisión · cierre| S
   OB -->|alta · pregunta · decisión · cierre| S
   S -->|reply| OA
@@ -52,132 +56,132 @@ flowchart TB
   WA1 & WA2 -->|worker_done| OA
   OB -->|worker-start| WB1
   WB1 -->|worker_done| OB
-  S -.->|lee| I
-  OA & OB -.->|leen| I
+  S -.->|reads| I
+  OA & OB -.->|read| I
 ```
 
-Cada flecha llena es un mensaje de Orca dirigido a un run (`run:<id>`). Las reglas que lo
-mantienen liviano:
+Each solid arrow is an Orca message addressed to a run (`run:<id>`). The rules that keep it light:
 
-- **Cuatro mensajes, nada de avance.** Un orquestador le manda al supervisor solo `alta` al
-  arrancar, `pregunta` cuando necesita tu decisión, `decisión` cuando respondiste en su pestaña y
-  `cierre` al terminar. El supervisor lee el avance de Orca y de `intent/` cuando lo necesita, así
-  su contexto se llena más despacio.
-- **Un supervisor por proyecto.** Su dirección vive en `.git/supervisar/run`. Todos los worktrees
-  del repo comparten ese `.git`, y git no lo versiona. Un orquestador que arranca en el repo lo
-  encuentra solo; en un repo sin supervisor trabaja como siempre.
-- **Un run por orquestador.** Sus workers y concilios van en ese run, y el traspaso se lleva el
-  run entero.
-- **Sin notas propias.** El supervisor reconstruye todo desde Orca y desde `intent/`.
+- **Four messages, no progress reports.** An orchestrator sends the supervisor only `alta`
+  (sign-on) when it starts, `pregunta` (question) when it needs your decision, `decisión`
+  (decision) when you answered in its tab, and `cierre` (close) when it finishes. The supervisor
+  reads progress from Orca and `intent/` when it needs it, so its context fills up more slowly.
+- **One supervisor per project.** Its address lives in `.git/supervisar/run`. Every worktree of
+  the repo shares that `.git`, and git does not track it. An orchestrator that starts in the repo
+  finds the supervisor on its own; in a repo without one, it works as usual.
+- **One run per orchestrator.** Its workers and reviews run inside that run, and a handoff carries
+  the whole run.
+- **No private notes.** The supervisor rebuilds everything from Orca and `intent/`.
 
-Dos skills completan el esquema:
+Two skills complete the scheme:
 
-- [handoff-clear](https://github.com/Ranteck/handoff-clear) hace los traspasos. Abre la pestaña
-  nueva con la línea "Supervisor: run `<id>`", cierra la vieja cuando la nueva tomó el run y mide
-  el contexto. Supervisar propone el traspaso al 30 % (supervisor) o al 40 % (orquestador).
-- [ai-native-sdlc](https://github.com/Ranteck/ai-native-sdlc) define `intent/`, el estado
-  durable de cada proyecto. El supervisor lo lee para el resumen y para clasificar ideas nuevas.
+- [handoff-clear](https://github.com/Ranteck/handoff-clear) does the handoffs. It opens the new tab
+  with the line "Supervisor: run `<id>`", closes the old one once the new one has taken the run,
+  and measures context. Supervisar proposes a handoff at 30 % (supervisor) or 40 %
+  (orchestrator).
+- [ai-native-sdlc](https://github.com/Ranteck/ai-native-sdlc) defines `intent/`, the durable state
+  of each project. The supervisor reads it for the summary and to classify new ideas.
 
-## Instalación
+## Installation
 
-Requisitos: Claude Code, Orca, [handoff-clear](https://github.com/Ranteck/handoff-clear)
-instalado en `~/.claude/skills/handoff-clear` (supervisar usa su script `contexto`) y proyectos en
-repos git. [ai-native-sdlc](https://github.com/Ranteck/ai-native-sdlc) es recomendado.
+Requirements: Claude Code, Orca, [handoff-clear](https://github.com/Ranteck/handoff-clear)
+installed at `~/.claude/skills/handoff-clear` (supervisar uses its `contexto` script), and
+projects in git repos. [ai-native-sdlc](https://github.com/Ranteck/ai-native-sdlc) is
+recommended.
 
 ```bash
 git clone https://github.com/Ranteck/supervisar.git ~/Proyectos/skills/supervisar
 ln -s ~/Proyectos/skills/supervisar/skills/supervisar ~/.claude/skills/supervisar
 ```
 
-Para comprobarlo, en una sesión nueva de Claude Code la lista de skills tiene que mostrar
-`supervisar`.
+To check it, the skill list of a new Claude Code session must show `supervisar`.
 
-## Uso
+## Usage
 
-1. En una pestaña de Orca dentro del proyecto, abrí Claude Code y escribí:
+1. In an Orca tab inside the project, open Claude Code and type:
 
    ```text
    Sos el supervisor; cargá `supervisar`.
    ```
 
-   El supervisor crea su run, lo guarda en `.git/supervisar/run` y queda esperando mensajes.
+   The supervisor creates its run, saves it in `.git/supervisar/run` and waits for messages.
 
-2. Abrí los orquestadores como siempre, por ejemplo:
+2. Open the orchestrators as usual, for example:
 
    ```text
    Sos el orquestador del intent intent/<slug>/intent.md.
    ```
 
-   Cada uno carga la skill, encuentra al supervisor y le manda su `alta`.
+   Each one loads the skill, finds the supervisor and sends its `alta`.
 
-3. Cuando un orquestador necesita una decisión, la pregunta aparece en el supervisor y en su
-   pestaña. Respondé en cualquiera de los dos lados.
+3. When an orchestrator needs a decision, the question shows up in the supervisor and in its tab.
+   Answer on either side.
 
-4. Pedile al supervisor "resumen" para ver el estado del proyecto.
+4. Ask the supervisor for "resumen" (summary) to see the state of the project.
 
-## Problemas comunes
+## Common problems
 
-| Síntoma | Causa | Qué hacer |
+| Symptom | Cause | What to do |
 | --- | --- | --- |
-| Un orquestador no le manda el alta | Arrancó con el diálogo "Trust this folder?" de una carpeta nueva y no cargó la skill | Aceptá la carpeta antes de lanzarlo, o abrilo con "Supervisor: run `<id>`" en el prompt |
-| El supervisor pregunta si reemplaza a otro | `.git/supervisar/terminal` nombra una pestaña que sigue abierta | Si es un supervisor viejo, aceptá; si no, cancelá y usá el que está abierto |
-| El orquestador avisa que sigue sin supervisor | El run guardado ya no existe (`run_not_found`), por ejemplo tras resetear Orca | Abrí un supervisor nuevo: crea otro run y reescribe el archivo |
+| An orchestrator does not send its `alta` | It started with the "Trust this folder?" dialog of a new folder and did not load the skill | Trust the folder before launching it, or start it with "Supervisor: run `<id>`" in the prompt |
+| The supervisor asks whether to replace another one | `.git/supervisar/terminal` names a tab that is still open | If it is an old supervisor, accept; otherwise cancel and use the open one |
+| The orchestrator says it continues without a supervisor | The saved run no longer exists (`run_not_found`), for example after resetting Orca | Open a new supervisor: it creates another run and rewrites the file |
 
-## Por qué funciona mejor en Orca
+## Why it works better on Orca
 
-La orquestación de Orca (probado con 1.4.257) ya trae lo que el esquema necesita, sin un bus de
-eventos propio:
+Orca's orchestration (tested with 1.4.257) already provides what the scheme needs, without a
+custom event bus:
 
-- **Un run es una dirección estable, no una pestaña.** Cualquier sesión puede tomarlo con
-  `orca orchestration run-use`, y los mensajes a `run:<id>` le llegan a quien lo coordine en ese
-  momento.
-- **Los mensajes despiertan a quien los recibe.** Orca avisa dentro de la sesión de Claude Code
-  ("You have 1 orchestration message"), así que nadie hace polling: tu respuesta despierta al
-  orquestador y una pregunta despierta al supervisor.
-- **El inbox persiste.** Si el destinatario está ocupado o entre sesiones, los mensajes esperan.
-  Las respuestas (`reply`) quedan en el run del orquestador y se pueden releer con
-  `orca orchestration inbox`.
-- **Los workers reportan al run, no a la pestaña.** `worker-start` lanza el worker y su
-  `worker_done` vuelve al run del orquestador.
-- **Cada mensaje trae la pestaña que lo mandó.** Con `orca terminal list` el supervisor sabe si un
-  orquestador sigue vivo, y `orca worktree ps` y `orca search` completan el estado.
+- **A run is a stable address, not a tab.** Any session can take it with
+  `orca orchestration run-use`, and messages to `run:<id>` reach whoever coordinates it at that
+  moment.
+- **Messages wake up their recipient.** Orca notifies inside the Claude Code session ("You have 1
+  orchestration message"), so nobody polls: your answer wakes the orchestrator, and a question
+  wakes the supervisor.
+- **The inbox persists.** If the recipient is busy or between sessions, messages wait. Replies
+  (`reply`) stay in the orchestrator's run and can be reread with `orca orchestration inbox`.
+- **Workers report to the run, not to the tab.** `worker-start` launches the worker and its
+  `worker_done` goes back to the orchestrator's run.
+- **Each message carries the tab that sent it.** With `orca terminal list` the supervisor knows
+  whether an orchestrator is still alive, and `orca worktree ps` and `orca search` complete the
+  picture.
 
-Lo que más se nota es el traspaso: la pestaña nueva toma el run y recibe lo que quedó pendiente,
-aunque un worker siga corriendo.
+The handoff is where this shows most: the new tab takes the run and receives whatever was pending,
+even while a worker is still running.
 
 ```mermaid
 sequenceDiagram
-  participant V as Pestaña vieja
+  participant V as Old tab
   participant R as run:orqA
-  participant N as Pestaña nueva
+  participant N as New tab
   participant W as Worker
   V->>W: worker-start
-  V->>N: handoff-clear abre la pestaña con el prompt
+  V->>N: handoff-clear opens the tab with the prompt
   N->>R: run-use
-  Note over V: run-current da none, se cierra
+  Note over V: run-current returns none, the tab closes
   W->>R: worker_done
-  R-->>N: Orca la despierta
+  R-->>N: Orca wakes it up
 ```
 
-## Llevarlo a Herdr
+## Porting it to Herdr
 
-[Herdr](https://herdr.dev) también organiza agentes en pestañas y paneles. La tabla compara lo que
-el esquema usa de Orca con lo que expone la CLI de Herdr 0.9.5 (`herdr --help`, `herdr agent`,
-`herdr notification`). No lo probé en Herdr: es lo que habría que construir encima.
+[Herdr](https://herdr.dev) also organizes agents in tabs and panes. The table compares what the
+scheme uses from Orca with what the Herdr 0.9.5 CLI exposes (`herdr --help`, `herdr agent`,
+`herdr notification`). It was not tested on Herdr: it lists what would have to be built on top.
 
-| El esquema necesita | En Orca | En Herdr hoy | Qué habría que agregar |
+| The scheme needs | On Orca | On Herdr today | What would have to be added |
 | --- | --- | --- | --- |
-| Una dirección que sobreviva al traspaso | `run:<id>`, que se toma con `run-use` | Agentes por nombre o id de panel; el nombre se borra cuando el agente sale | Un registro del nombre de cada rol (por ejemplo en `.git/supervisar/`) y pasárselo a la pestaña nueva con `herdr agent rename` |
-| Mensajes que esperan | Inbox por run | `agent prompt` escribe en el panel, y rechaza a un agente `blocked`; no hay cola | Un buzón por destinatario, por ejemplo archivos en `.git/supervisar/inbox/` |
-| Despertar sin polling | Aviso dentro de la sesión | `agent prompt` despierta a un agente `idle` | Un proceso que entregue el buzón cuando el destinatario pase a `idle` (`herdr agent wait --until idle`) |
-| Respuestas con hilo | `reply --id <msg>` | No hay | Un id por mensaje y el destinatario de la respuesta en el buzón |
-| Workers que reportan al orquestador | `worker-start` y `worker_done` | `agent start` y `agent prompt --wait`, que bloquean al que espera | Que el worker escriba su resultado en el buzón del orquestador |
-| Saber si un orquestador está vivo | Pestaña del remitente en `terminal list` | `agent list` y `agent get` dan `idle`, `working`, `blocked` o `done` | Nada: acá Herdr da más información que Orca |
-| Ver si respondiste en una pestaña | `orca search` | `agent read` de cada panel | Leer los paneles o los transcripts de Claude Code |
+| An address that survives a handoff | `run:<id>`, taken with `run-use` | Agents by name or pane id; the name is cleared when the agent exits | A registry of each role's name (for example in `.git/supervisar/`), handed to the new tab with `herdr agent rename` |
+| Messages that wait | One inbox per run | `agent prompt` types into the pane and rejects a `blocked` agent; there is no queue | One mailbox per recipient, for example files in `.git/supervisar/inbox/` |
+| Wake-up without polling | Notice inside the session | `agent prompt` wakes an `idle` agent | A process that delivers the mailbox when the recipient turns `idle` (`herdr agent wait --until idle`) |
+| Threaded replies | `reply --id <msg>` | None | A message id and a reply-to recipient in the mailbox |
+| Workers reporting to the orchestrator | `worker-start` and `worker_done` | `agent start` and `agent prompt --wait`, which block the caller | Workers write their result to the orchestrator's mailbox |
+| Knowing whether an orchestrator is alive | Sender tab in `terminal list` | `agent list` and `agent get` report `idle`, `working`, `blocked` or `done` | Nothing: here Herdr gives more information than Orca |
+| Seeing whether you answered in a tab | `orca search` | `agent read` on each pane | Read the panes or the Claude Code transcripts |
 
-`herdr notification show` muestra una notificación de escritorio para vos, no un mensaje para otro
-agente.
+`herdr notification show` displays a desktop notification for you, not a message for another
+agent.
 
-## Licencia
+## License
 
 MIT
