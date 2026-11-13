@@ -60,5 +60,9 @@ supervisor para los orquestadores; "Sos el supervisor; cargá `supervisar`" en A
 | --- | --- | --- |
 | Supervisor en A | crea su run y escribe `A/.git/supervisar/run` y `terminal` | ✅ `run_91a5…` y su pestaña; no tomó la pestaña de otro repo como supervisor |
 | Orquestador en A-feat | encuentra al supervisor por el `--git-common-dir` y manda el alta | ✅ `alta: intent/extra/intent.md`, cuerpo exacto, rama `extra` |
-| Orquestador en B | no hay supervisor: trabaja como siempre y no le escribe a A | ✅ el inbox de A tiene solo el alta de A-feat; B no cargó la skill (4 de 5 la cargan sin traspaso) |
+| Orquestador en B | no hay supervisor: trabaja como siempre y no le escribe a A | ✅ el inbox de A tiene solo el alta de A-feat. B no cargó la skill porque arrancó con el diálogo "Trust this folder?"; relanzado en la carpeta ya aceptada, la cargó, buscó en su `.git` y siguió sin supervisor |
 | Limpieza | ninguna pestaña de prueba | ✅ |
+
+Con la descripción nueva, todos los orquestadores abiertos sin traspaso en carpetas ya aceptadas
+cargaron la skill (F, G, H, A-feat y B relanzado). La primera vez en una carpeta nueva, el diálogo de
+confianza puede hacer que no la cargue; un worktree de un repo aceptado no lo muestra.
