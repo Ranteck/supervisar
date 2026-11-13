@@ -1,6 +1,6 @@
 ---
 name: supervisar
-description: Usar cuando el usuario pide un supervisor u observador central ("supervisá", "sos el supervisor", "coordiná los orquestadores"), cuando un prompt trae "Supervisor: run", o cuando una sesión de Claude Code en Orca arranca o retoma un intent como orquestador.
+description: Usar SIEMPRE al arrancar o retomar como orquestador de un intent ("sos el orquestador", "orquestá", un `intent/…/intent.md`), aunque nadie mencione un supervisor, para saber si hay uno y reportarle. También cuando el usuario pide un supervisor u observador central ("supervisá", "sos el supervisor", "coordiná los orquestadores") o un prompt trae "Supervisor: run".
 ---
 
 # Supervisar
@@ -43,19 +43,22 @@ como siempre y no crees uno.
    `orca orchestration run-create --objective "<intent>"`. Es tu único run: los workers y concilios
    van en él, sin otro `run-create`, porque el traspaso se lleva un solo run.
 2. **Mensajes:** solo estos cuatro, con
-   `orca orchestration send --to run:<supervisor> --subject "<tipo>: …" --body "…"`, sin `--run`,
-   y con el formato de `assets/mensajes.md`.
+   `orca orchestration send --to run:<supervisor> --subject "…" --body "…"`, sin `--run`, con
+   este asunto y cuerpo exactos:
 
-   | Tipo | Cuándo |
-   | --- | --- |
-   | `alta` | al arrancar, o al retomar sin traspaso |
-   | `pregunta` | necesitás una decisión del usuario; también se la hacés en tu pestaña |
-   | `decisión` | el usuario respondió en tu pestaña |
-   | `cierre` | terminaste o abandonaste el intent |
+   | Cuándo | `--subject` | `--body` |
+   | --- | --- | --- |
+   | al arrancar, o al retomar sin traspaso | `alta: <ruta del intent>` | `proyecto: <ruta> · rama: <rama> · run: <tu run>` |
+   | cada decisión que le pedís al usuario, una por mensaje, antes de hacérsela en tu pestaña | `pregunta: <la pregunta, en una línea>` | `opciones: <a, b, …> · contexto: <archivo donde se decide>` |
+   | apenas el usuario responde en tu pestaña, una por pregunta | `decisión: <id del mensaje de la pregunta>` | `<respuesta del usuario, textual>` |
+   | terminaste o abandonaste el intent | `cierre: <ruta del intent>` | `resultado: terminado o abandonado · <commit o motivo>` |
+
+   En tu pestaña, preguntá con texto y terminá el turno, sin AskUserQuestion: bloquea la pestaña y
+   no deja entrar la respuesta del supervisor.
 
    El supervisor lee el avance de Orca y de `intent/` cuando lo necesita.
 3. Si el alta da `run_not_found`, seguí sin supervisor y avisale al usuario.
-4. La respuesta del supervisor te llega como mensaje y te despierta: aplicala.
+4. La respuesta del supervisor te llega como mensaje y te despierta: aplicala, sin mandar `decisión`.
 5. **Traspaso:** con `handoff-clear`, y el prompt lleva "Supervisor: run `<id>`; cargá
    `supervisar`". La pestaña nueva retoma tu run y el supervisor no recibe nada.
 6. Al cerrar cada tarea, corré `python3 ~/.claude/skills/handoff-clear/scripts/contexto`. Si da
