@@ -50,3 +50,15 @@ orquestador del intent `<ruta>`".
   de `reply` quedan en el inbox del run del orquestador, no en el del supervisor.
 - G encontró en la memoria (claude-mem) el alta de F y no mandó otra: la memoria puede
   reemplazar la búsqueda en Orca.
+
+## Supervisor por proyecto (2026-11-13)
+
+Repos descartables: A (con el worktree A-feat, rama `extra`) y B. Prompts sin mención de
+supervisor para los orquestadores; "Sos el supervisor; cargá `supervisar`" en A.
+
+| Paso | Esperado | Resultado |
+| --- | --- | --- |
+| Supervisor en A | crea su run y escribe `A/.git/supervisar/run` y `terminal` | ✅ `run_91a5…` y su pestaña; no tomó la pestaña de otro repo como supervisor |
+| Orquestador en A-feat | encuentra al supervisor por el `--git-common-dir` y manda el alta | ✅ `alta: intent/extra/intent.md`, cuerpo exacto, rama `extra` |
+| Orquestador en B | no hay supervisor: trabaja como siempre y no le escribe a A | ✅ el inbox de A tiene solo el alta de A-feat; B no cargó la skill (4 de 5 la cargan sin traspaso) |
+| Limpieza | ninguna pestaña de prueba | ✅ |
