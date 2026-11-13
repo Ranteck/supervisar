@@ -52,3 +52,13 @@ Sin aplicar, a decisión de Denis: dos supervisores vivos (5), vivo por pestaña
 | E8 (regresión) | ✅ | |
 Tras el concilio bajo (Opus vía Antigravity: traspaso sin definir, orden del arranque, precedencia
 de `cierre:`): E13a/b/c y E14 con `cierre:` ✅.
+
+## Supervisor por proyecto (E5, E13, E15)
+2026-11-13 · subagente Haiku sin los criterios.
+
+| Escenario | Resultado | Nota |
+| --- | --- | --- |
+| E5 | ✅ | busca en `$(git rev-parse --git-common-dir)/supervisar/run` |
+| E13 | ✅ | archivos del `.git` de su repo; pregunta si `term_A` vive |
+| E15 | ✅ | A-feat reporta a `run_supA`; B trabaja sin supervisor; la idea de B se propone llevar allá |
+| E8 (regresión) | ✅ | se hizo explícito que el prompt del traspaso lleva `run-use --id` |

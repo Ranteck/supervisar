@@ -5,15 +5,20 @@ description: Usar SIEMPRE al arrancar o retomar como orquestador de un intent ("
 
 # Supervisar
 
-Un supervisor central coordina orquestadores por Orca. Su dirección es un run permanente, cuyo id
-está en `~/.local/state/supervisar/run`.
+Cada proyecto (un repo con todos sus worktrees) tiene a lo sumo un supervisor, que coordina sus
+orquestadores por Orca. Su estado vive en
+`$(git rev-parse --path-format=absolute --git-common-dir)/supervisar/`, el mismo para todos los
+worktrees del repo: el archivo `run` tiene el id de su run permanente, que es su dirección, y
+`terminal` tiene su pestaña.
 
 ## Si sos el supervisor
 
-1. **Al arrancar:** si tu prompt no trae `run-use --id` (no venís de un traspaso) y
-   `~/.local/state/supervisar/terminal` nombra otra pestaña que sigue en `orca terminal list`, hay
+Corrés en una carpeta de tu proyecto y solo ves ese proyecto.
+
+1. **Al arrancar:** si tu prompt no trae `run-use --id` (no venís de un traspaso) y el archivo
+   `terminal` nombra otra pestaña que sigue en `orca terminal list`, hay
    otro supervisor vivo: preguntale al usuario si lo reemplazás y, si dice que no, frená. Después,
-   si el archivo del run existe, `orca orchestration run-use --id <id>`. Si no existe, o `run-use`
+   si el archivo `run` existe, `orca orchestration run-use --id <id>`. Si no existe, o `run-use`
    da `run_not_found`, `orca orchestration run-create --objective "supervisor"` y guardá el id en
    ese archivo. Por último, guardá tu `$ORCA_TERMINAL_HANDLE` en el archivo `terminal`.
 2. **Altas, decisiones y cierres:** no respondas; quedan en el inbox.
@@ -21,14 +26,15 @@ está en `~/.local/state/supervisar/run`.
    `orca orchestration reply --id <msg_id> --body "<respuesta>"`.
 4. **Resumen, a pedido:** con `assets/resumen.md`, desde
    `orca orchestration inbox --terminal run:<id> --limit 100` de tu run y del run de cada alta (ahí
-   quedan los `Re:` de las respuestas que mandaste), `orca worktree ps` y el `intent/` de cada
+   quedan los `Re:` de las respuestas que mandaste), `orca worktree ps` y el `intent/` de tu
    proyecto. Un orquestador con `cierre:` está cerrado; si no, está vivo si la pestaña de su último
-   mensaje sigue en `orca terminal list`, y si no está ahí, pero su proyecto y rama tienen sesiones
+   mensaje sigue en `orca terminal list`, y si no está ahí, pero su rama tiene sesiones
    vivas, es un posible traspaso (la pestaña nueva no avisa hasta su próximo mensaje). Una pregunta con
    `Re:` o `decisión:` no está abierta. Si no tiene, buscala con `orca search "<texto>"`:
    - si el usuario la respondió en la pestaña del orquestador, no está abierta;
    - si hay dos respuestas distintas, mostrá las dos y preguntá cuál vale.
-5. **Ideas nuevas:** decí a qué intent van o si piden uno nuevo, y proponé el paso siguiente. Para
+5. **Ideas nuevas:** decí a qué intent de tu proyecto van o si piden uno nuevo, y proponé el paso
+   siguiente; si son de otro proyecto, decilo y proponé llevarlas allá. Para
    abrir un orquestador aprobado, usá `handoff-clear` con la línea
    "Supervisor: run `<id>`; cargá `supervisar`".
 6. Todo se reconstruye de esas fuentes: no guardes notas propias. Nada se lanza, cierra ni
@@ -37,8 +43,8 @@ está en `~/.local/state/supervisar/run`.
 
 ## Si reportás a uno
 
-Hay supervisor si el prompt trae "Supervisor: run `<id>`" o si existe el archivo; tu memoria no
-cuenta. Si no hay, trabajá como siempre y no crees uno.
+Hay supervisor si el prompt trae "Supervisor: run `<id>`" o si existe el archivo `run` de tu
+repo; tu memoria no cuenta. Si no hay, trabajá como siempre y no crees uno.
 
 1. **Tu run:** si `orca orchestration run-current` da `none`,
    `orca orchestration run-create --objective "<intent>"`. Es tu único run: los workers y concilios
@@ -68,5 +74,5 @@ cuenta. Si no hay, trabajá como siempre y no crees uno.
 Al terminar cada mensaje (supervisor) o cada tarea (orquestador), corré
 `python3 ~/.claude/skills/handoff-clear/scripts/contexto`. Con 30 % (supervisor) o 40 %
 (orquestador) o más, proponé el traspaso con `handoff-clear`. El supervisor pasa su run como la
-orquestación en curso, y su prompt dice "Sos el supervisor; cargá `supervisar`" en vez de la línea
-"Supervisor: run".
+orquestación en curso (el prompt lleva `run-use --id <tu run>`) y dice "Sos el supervisor; cargá
+`supervisar`" en vez de la línea "Supervisor: run".

@@ -43,3 +43,12 @@ se reescribió y se volvió a correr.
 | --- | --- | --- |
 | E13 otro supervisor vivo | ❌ | `run-use` directo; no mira `term_A` ni guarda su handle |
 | E14 vivo por pestaña | ❌ | A vivo por la rama; ignora el handle del último mensaje |
+
+## Supervisor por proyecto (E5, E13, E15), con la skill de db8d3a3
+2026-11-13 · subagente Haiku (`orquestar:explorador`) · sin los criterios.
+
+| Escenario | Resultado | Nota |
+| --- | --- | --- |
+| E5 | ❌ | busca en `~/.local/state/supervisar/run`, no en el `.git` de su repo |
+| E13 | ❌ | mira los archivos globales |
+| E15 | ❌ | el de B le manda el alta al supervisor de A; la idea de B se clasifica en A |

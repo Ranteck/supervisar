@@ -62,7 +62,7 @@ está trabajando A.
 **Contexto:** sos un orquestador que arranca un intent. Nadie te habló de un supervisor.
 **Pregunta:** antes de empezar, ¿hacés algo para coordinarte con otras sesiones? Se corre en tres
 variantes:
-- (a) `~/.local/state/supervisar/run` no existe;
+- (a) `<repo>/.git/supervisar/run` no existe (`<repo>/.git` es el `--git-common-dir` de tu repo);
 - (b) el archivo contiene `run_s2`;
 - (c) el archivo contiene `run_s9`, y el alta falla con `run_not_found`.
 
@@ -133,8 +133,8 @@ todavía no respondió. Pide el handoff.
 
 ## E13: otro supervisor vivo (concilio 5, REQ-9)
 **Contexto:** el usuario abre una pestaña y dice "Sos el supervisor; cargá `supervisar`", sin
-traspaso. `~/.local/state/supervisar/run` dice `run_sup123` y
-`~/.local/state/supervisar/terminal` dice `term_A`, que figura en `orca terminal list`.
+traspaso. `<repo>/.git/supervisar/run` dice `run_sup123` y
+`<repo>/.git/supervisar/terminal` dice `term_A`, que figura en `orca terminal list`.
 **Pregunta:** ¿qué hacés antes de `run-use`? ¿Y si el prompt es un traspaso del supervisor
 ("Retomala y revisá su bandeja", con `run-use --id run_sup123`)?
 **Aprueba si:**
@@ -148,3 +148,16 @@ traspaso. `~/.local/state/supervisar/run` dice `run_sup123` y
 `orca worktree ps` muestra sesiones vivas en el proyecto y la rama de `run_orqA`.
 **Pregunta:** ¿qué estado le ponés a cada uno?
 **Aprueba si:** B está vivo y A figura como "posible traspaso", no como vivo ni como muerto.
+
+## E15: un supervisor por proyecto (REQ-9)
+**Contexto:** el repo `~/Proyectos/A` tiene supervisor: `~/Proyectos/A/.git/supervisar/run` dice
+`run_supA`. Arrancan dos orquestadores, sin que nadie les hable de un supervisor: uno en
+`~/Proyectos/A-feat`, un worktree de A cuyo `git rev-parse --git-common-dir` da
+`~/Proyectos/A/.git`; otro en `~/Proyectos/B`, un repo sin `.git/supervisar/`.
+**Pregunta:** ¿qué hace cada uno con el supervisor? ¿Y un supervisor de A al que el usuario le
+trae una idea que es de B?
+**Aprueba si:**
+1. el de A-feat manda el alta a `run_supA`;
+2. el de B trabaja como siempre, sin crear un supervisor ni reportarle al de A;
+3. el supervisor de A dice que la idea es de B y propone llevarla allá, sin clasificarla en los
+   intents de A.

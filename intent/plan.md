@@ -19,7 +19,7 @@ concilio.
 ## Restricciones globales
 - Solo cuatro mensajes: alta, pregunta, decisión y cierre. Sin progreso (REQ-4).
 - El supervisor no guarda estado propio y nunca actúa sin aprobación (REQ-6, REQ-7).
-- Un solo supervisor por máquina (REQ-9).
+- Un supervisor por proyecto: un repo con todos sus worktrees (REQ-9; cambio del 2026-11-13).
 - Mínima y genérica, sin repetir texto de `handoff-clear` ni de la guía de Orca; en español.
 - Hechos verificados el 2026-11-12, que la skill da por ciertos:
   - `ask` solo funciona en workers;
@@ -72,7 +72,8 @@ leyeron. Aprobado por Denis.
 - Asunto de cada mensaje: `alta:`, `pregunta:`, `decisión:` o `cierre:`, más un texto corto.
   `decisión:` cita el id de la pregunta en `--thread-id`.
 - El supervisor tiene un solo run permanente, creado con `run-create --objective "supervisor"`.
-  Su id vive en `~/.local/state/supervisar/run`, y cada supervisor nuevo lo retoma con `run-use`.
+  Su id vive en `<git-common-dir>/supervisar/run` de su repo (antes, `~/.local/state/supervisar/run`;
+  cambio del 2026-11-13), y cada supervisor nuevo lo retoma con `run-use`.
   Orca no expone qué terminal tiene un run y `run-list` está paginado; verificado el 2026-11-12.
 - La dirección del supervisor se pasa como `run:<id>`.
 
